@@ -36,8 +36,8 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
+        'api' => [
+            'driver' => 'passport',
             'provider' => 'users',
         ],
     ],
@@ -98,6 +98,8 @@ return [
             'throttle' => 60,
         ],
     ],
+
+
 
     /*
     |--------------------------------------------------------------------------
