@@ -11,38 +11,23 @@ use App\Http\Controllers\API\ProductTypeController;
 | Public routes
 |--------------------------------------------------------------------------
 */
-
 Route::post('login', [AuthController::class, 'login']);
 
-Route::middleware('auth:api')->group(function () {
-    Route::post('logout', [AuthController::class, 'logout']);
-    Route::get('me', [AuthController::class, 'me']);
-});
 /*
 |--------------------------------------------------------------------------
 | Protected routes (require token)
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth:api')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('me', [AuthController::class, 'me']);
 
     Route::apiResource('products', ProductController::class);
     Route::apiResource('customers', CustomerController::class);
     Route::apiResource('orders', OrderController::class);
+    Route::apiResource('product-types', ProductTypeController::class);
 });
-
-//Route::middleware('auth:api')->group(function () {
-    Route::apiResource('customers', CustomerController::class);
-//});
-
-//Route::middleware('auth:api')->group(function () {
-    Route::apiResource('products', ProductController::class);
-//});
-
-//Route::middleware('auth:api')->group(function () {
-    Route::apiResource('orders', OrderController::class);
-//});
-Route::apiResource('product-types', ProductTypeController::class);
 
 Route::get('/product-statuses', function() {
     return response()->json([

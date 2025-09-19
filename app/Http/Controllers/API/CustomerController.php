@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Http\Requests\CustomerRequest;
+use Auth;
 
 class CustomerController extends Controller
 {
@@ -43,7 +44,6 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         $customer = Customer::findOrFail($id);
-//        $customer->deleted_by = Auth::id();
         $customer->save();
         $customer->delete();
 

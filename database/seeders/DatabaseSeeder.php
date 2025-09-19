@@ -14,7 +14,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            OrderItem::factory()->count(300)->create(),
+            UserSeeder::class,
+            CustomerSeeder::class,
+            ProductTypeSeeder::class,
+            ProductSeeder::class,
+            OrderSeeder::class,
+            OrderItemSeeder::class,
         ]);
     }
 }

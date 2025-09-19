@@ -35,12 +35,12 @@ return [
     |
     */
 
-    'guards' => [
-        'api' => [
-            'driver' => 'passport',
-            'provider' => 'users',
-        ],
-    ],
+//    'guards' => [
+//        'api' => [
+//            'driver' => 'passport',
+//            'provider' => 'users',
+//        ],
+//    ],
 
     /*
     |--------------------------------------------------------------------------
