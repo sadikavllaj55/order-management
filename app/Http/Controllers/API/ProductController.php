@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -40,10 +41,10 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product)
     {
         $data = $request->validated();
+        $data['sku'] = $data['sku'] ?? Str::upper(Str::random(8));
 
         // Add the authenticated user as updater
         $data['updated_by'] = Auth::id();
-
         $product->update($data);
 
         return response()->json([

@@ -20,11 +20,10 @@ class OrderRequest extends FormRequest
         return [
             'customer_id'  => ['required', 'integer', 'exists:customers,id'],
             'total_amount' => [$orderId ? 'sometimes' : 'required', 'numeric', 'min:0'],
-            'status'       => [
+            'status' => [
                 $orderId ? 'sometimes' : 'required',
-                'integer',
-                Rule::in($validStatusIds),
-            ],        ];
+                Rule::in(array_keys(config('order.statuses')))
+            ],       ];
     }
 
     public function messages(): array

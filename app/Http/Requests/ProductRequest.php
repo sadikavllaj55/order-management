@@ -36,14 +36,14 @@ class ProductRequest extends FormRequest
                 'min:0'
             ],
             'sku'             => [
-                $productId ? 'sometimes' : 'required',
+                $productId ? 'sometimes' : 'nullable',
                 'string',
                 'max:100',
                 Rule::unique('products', 'sku')->ignore($productId),
             ],
-            'status'          => [
-                $productId ? 'sometimes' : 'required',
-                'in:active,inactive,out_of_stock'
+            'status' => [
+                $productId ? 'sometimes' : 'nullable',
+                Rule::in(array_keys(config('product.statuses')))
             ],
         ];
     }

@@ -43,7 +43,7 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         $customer = Customer::findOrFail($id);
-        $customer->deleted_by = Auth::id();
+//        $customer->deleted_by = Auth::id();
         $customer->save();
         $customer->delete();
 

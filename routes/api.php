@@ -4,7 +4,7 @@ use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\ProductController;
-
+use App\Http\Controllers\API\ProductTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,3 +42,18 @@ Route::middleware('auth:api')->group(function () {
 //Route::middleware('auth:api')->group(function () {
     Route::apiResource('orders', OrderController::class);
 //});
+Route::apiResource('product-types', ProductTypeController::class);
+
+Route::get('/product-statuses', function() {
+    return response()->json([
+        'success' => true,
+        'data' => config('product.statuses')
+    ]);
+});
+
+Route::get('/order-statuses', function() {
+    return response()->json([
+        'success' => true,
+        'data' => config('order.statuses')
+    ]);
+});
