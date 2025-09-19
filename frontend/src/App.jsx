@@ -1,24 +1,23 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Customers from "./pages/Customers";
+import Dashboard from "./components/Dashboard";
 import Products from "./pages/Products";
-import Orders from "./pages/Orders.jsx";
+import Customers from "./pages/Customers";
+import Orders from "./pages/Orders";
 import Login from "./pages/Login";
-import Dashboard from "./components/Dashboard.jsx";
 
 function App() {
-   /* return (
+    return (
         <Router>
             <Routes>
                 <Route path="/" element={<Login />} />
-                return <Dashboard />;
-                <Route path="/products" element={<Products />} />
-                <Route path="/customers" element={<Customers />} />
-                <Route path="/orders" element={<Orders />} />
-
+                <Route path="/dashboard" element={<Dashboard />}>
+                    <Route path="products/*" element={<Products />} />
+                    <Route path="customers/*" element={<Customers />} />
+                    <Route path="orders/*" element={<Orders />} />
+                </Route>
             </Routes>
         </Router>
-    );*/
-    return <Dashboard />;
+    );
 }
 
 export default App;
