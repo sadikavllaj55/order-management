@@ -9,7 +9,7 @@ class ProductRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; // allow request
+        return true;
     }
 
     public function rules(): array

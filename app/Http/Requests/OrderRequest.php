@@ -9,7 +9,7 @@ class OrderRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; // allow the request
+        return true;
     }
 
     public function rules(): array
