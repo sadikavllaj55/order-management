@@ -1,13 +1,13 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { productsRoutes } from "./routes/ProductsRoutes";
-import { customersRoutes } from "./routes/CustomersRoutes";
-import Login from "./pages/auth/Login";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import {authRoutes} from "./routes/AuthRoutes.jsx";
+import {productsRoutes} from "./routes/ProductsRoutes";
+import {customersRoutes} from "./routes/CustomersRoutes";
 
 function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/login" element={<Login />} />
+                {authRoutes}
                 {productsRoutes}
                 {customersRoutes}
             </Routes>

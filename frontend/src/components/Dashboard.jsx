@@ -1,8 +1,6 @@
 import { useState } from "react";
 import Sidebar from "./LogoutButton.jsx";
-import Orders from "../pages/Orders";
 import Customers from "../pages/Customers";
-import Products from "../pages/Products";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 

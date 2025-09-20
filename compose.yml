@@ -1,0 +1,40 @@
+services:
+  # Apps
+  app:
+    build:
+      dockerfile: ./docker/Dockerfile
+      args:
+        ENVIRONMENT: ${APP_ENV}
+    container_name: order-management
+    hostname: order-management
+    restart: always
+    working_dir: /srv
+    ports:
+      - '5173:5173'
+      - '8080:80'
+    volumes:
+      - ./:/srv
+    environment:
+      ENVIRONMENT: ${APP_ENV}
+      PHP_IDE_CONFIG: serverName=order-management
+      VIRTUAL_HOST: order-management.web
+
+  # Services
+  db:
+    image: mariadb:latest
+    container_name: order-management-db
+    hostname: order-management-db
+    restart: always
+    working_dir: /root
+    environment:
+      MARIADB_USER: ${DB_USERNAME}
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MARIADB_DATABASE: ${DB_DATABASE}
+    ports:
+      - "13307:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:
+    name: db-data
