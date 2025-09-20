@@ -21,8 +21,8 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $data = $request->validated();
-
-        // Add the authenticated user as creator
+        $data['sku'] = $data['sku'] ?? Str::upper(Str::random(8));
+        $data['status'] = $data['status'] ?? 0;
         $data['created_by'] = Auth::id();
 
         $product = Product::create($data);
@@ -41,7 +41,6 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product)
     {
         $data = $request->validated();
-        $data['sku'] = $data['sku'] ?? Str::upper(Str::random(8));
 
         // Add the authenticated user as updater
         $data['updated_by'] = Auth::id();

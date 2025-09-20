@@ -83,7 +83,6 @@ export default function ProductEdit() {
             await updateProduct(id, product);
             navigate("/products");
         } catch (err) {
-            // Show first backend error message dynamically
             if (err.response && err.response.data && err.response.data.errors) {
                 const firstKey = Object.keys(err.response.data.errors)[0];
                 setErrorMessage(err.response.data.errors[firstKey][0]);
