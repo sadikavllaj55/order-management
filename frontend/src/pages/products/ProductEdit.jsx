@@ -16,8 +16,11 @@ export default function ProductEdit() {
     });
 
     const [types, setTypes] = useState([]);
+    const [statuses, setStatuses] = useState({});
     const [loading, setLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState(""); // for backend error message
 
+    // Fetch product and types
     useEffect(() => {
         async function fetchData() {
             try {
@@ -47,36 +50,46 @@ export default function ProductEdit() {
         fetchData();
     }, [id]);
 
-    const [statuses, setStatuses] = useState({});
-
+    // Fetch statuses
     useEffect(() => {
         const fetchStatuses = async () => {
             try {
                 const res = await getProductStatuses();
                 setStatuses(res.data.data); // store as object {0: "Processing", ...}
             } catch (err) {
-                console.error("Failed to load order statuses", err);
+                console.error("Failed to load product statuses", err);
             }
         };
 
         fetchStatuses();
     }, []);
 
+    // Handle input change
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProduct((prev) => ({
             ...prev,
             [name]: name === "status" ? Number(value) : value,
         }));
+
+        // Clear backend error message on change
+        if (errorMessage) setErrorMessage("");
     };
 
+    // Handle form submit
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await updateProduct(id, product);
             navigate("/products");
         } catch (err) {
-            console.error("Failed to update product", err);
+            // Show first backend error message dynamically
+            if (err.response && err.response.data && err.response.data.errors) {
+                const firstKey = Object.keys(err.response.data.errors)[0];
+                setErrorMessage(err.response.data.errors[firstKey][0]);
+            } else {
+                setErrorMessage("Something went wrong");
+            }
         }
     };
 
@@ -85,6 +98,10 @@ export default function ProductEdit() {
     return (
         <div className="max-w-md mx-auto mt-10">
             <h1 className="text-2xl font-bold mb-4">Edit Product</h1>
+
+            {errorMessage && (
+                <p className="text-red-500 mb-2">{errorMessage}</p>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-3">
                 <input
@@ -100,7 +117,7 @@ export default function ProductEdit() {
                     name="product_type_id"
                     value={product.product_type_id}
                     onChange={handleChange}
-                    className="border p-2 w-full"
+                    className="border p-2 w-full text-black "
                 >
                     <option value="">Select Type</option>
                     {types.map((t) => (
@@ -142,7 +159,7 @@ export default function ProductEdit() {
                     onChange={(e) =>
                         setProduct({ ...product, status: Number(e.target.value) })
                     }
-                    className="border p-2 w-full"
+                    className="border p-2 w-full text-black"
                 >
                     {Object.entries(statuses).map(([key, label]) => (
                         <option key={key} value={key}>

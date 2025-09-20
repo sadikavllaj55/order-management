@@ -1,15 +1,28 @@
 import { useEffect, useState } from "react";
-import { getProducts, deleteProduct } from "../../api/products";
+import { getProducts, deleteProduct, getProductTypes, getProductStatuses } from "../../api/products";
 
 export default function ProductList() {
     const [products, setProducts] = useState([]);
+    const [types, setTypes] = useState([]);
+    const [statuses, setStatuses] = useState({});
     const [loading, setLoading] = useState(true);
 
-    const fetchProducts = () => {
+    const fetchProducts = async () => {
         setLoading(true);
-        getProducts()
-            .then((res) => setProducts(res.data))
-            .finally(() => setLoading(false));
+        try {
+            const [productsRes, typesRes, statusesRes] = await Promise.all([
+                getProducts(),
+                getProductTypes(),
+                getProductStatuses(),
+            ]);
+            setProducts(productsRes.data);
+            setTypes(typesRes.data);
+            setStatuses(statusesRes.data.data); // {0: "Processing", 1: "Active", ...}
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleDelete = (id) => {
@@ -23,6 +36,10 @@ export default function ProductList() {
     }, []);
 
     if (loading) return <p>Loading products...</p>;
+
+    // Helper functions
+    const getTypeName = (typeId) => types.find((t) => t.id === typeId)?.name || "N/A";
+    const getStatusLabel = (status) => statuses[status] || "N/A";
 
     return (
         <div className="p-6">
@@ -38,7 +55,11 @@ export default function ProductList() {
                 <tr>
                     <th className="border px-4 py-2">ID</th>
                     <th className="border px-4 py-2">Name</th>
+                    <th className="border px-4 py-2">SKU</th>
+                    <th className="border px-4 py-2">Stock</th>
                     <th className="border px-4 py-2">Price</th>
+                    <th className="border px-4 py-2">Type</th>
+                    <th className="border px-4 py-2">Status</th>
                     <th className="border px-4 py-2">Actions</th>
                 </tr>
                 </thead>
@@ -47,7 +68,11 @@ export default function ProductList() {
                     <tr key={p.id}>
                         <td className="border px-4 py-2">{p.id}</td>
                         <td className="border px-4 py-2">{p.name}</td>
+                        <td className="border px-4 py-2">{p.sku || "N/A"}</td>
+                        <td className="border px-4 py-2">{p.stock}</td>
                         <td className="border px-4 py-2">${p.price}</td>
+                        <td className="border px-4 py-2">{getTypeName(p.product_type_id)}</td>
+                        <td className="border px-4 py-2">{getStatusLabel(p.status)}</td>
                         <td className="border px-4 py-2 space-x-2">
                             <button
                                 onClick={() => (window.location.href = `/products/view/${p.id}`)}

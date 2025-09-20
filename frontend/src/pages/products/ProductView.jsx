@@ -1,92 +1,62 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { getProduct, updateProduct } from "../../api/products";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { getProduct, getProductTypes, getProductStatuses } from "../../api/products";
 
-export default function ProductEdit() {
-    const { id } = useParams(); // get product id from URL
-    const [name, setName] = useState("");
-    const [price, setPrice] = useState("");
-    const [imageFile, setImageFile] = useState(null);
-    const [loading, setLoading] = useState(false);
+export default function ProductView() {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [product, setProduct] = useState(null);
+    const [types, setTypes] = useState([]);
+    const [statuses, setStatuses] = useState({});
+    const [loading, setLoading] = useState(true);
 
-    // Fetch product data
     useEffect(() => {
-        getProduct(id)
-            .then((res) => {
-                setName(res.data.name);
-                setPrice(res.data.price);
-            })
-            .catch((err) => console.error(err));
+        async function fetchData() {
+            try {
+                const [productRes, typesRes, statusesRes] = await Promise.all([
+                    getProduct(id),
+                    getProductTypes(),
+                    getProductStatuses(),
+                ]);
+
+                setProduct(productRes.data);
+                setTypes(typesRes.data);
+                setStatuses(statusesRes.data.data); // {0: "Processing", 1: "Active", ...}
+            } catch (err) {
+                console.error("Failed to load product data", err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchData();
     }, [id]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!name || !price) {
-            alert("Please fill all fields.");
-            return;
-        }
+    if (loading) return <p className="text-center mt-10">Loading...</p>;
+    if (!product) return <p className="text-center mt-10">Product not found.</p>;
 
-        const formData = new FormData();
-        formData.append("name", name);
-        formData.append("price", price);
-        if (imageFile) formData.append("image", imageFile);
-
-        setLoading(true);
-        try {
-            await updateProduct(id, formData);
-            alert("Product updated successfully!");
-            window.location.href = "/products"; // Redirect to product list
-        } catch (error) {
-            console.error(error);
-            alert("Error updating product.");
-        } finally {
-            setLoading(false);
-        }
-    };
+    const productType = types.find((t) => t.id === product.product_type_id)?.name || "N/A";
+    const productStatus = statuses[product.status] || "N/A";
 
     return (
-        <div className="p-6 max-w-lg mx-auto">
-            <h1 className="text-2xl font-bold mb-4">Edit Product</h1>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block mb-1 font-medium text-red-500">Name</label>
-                    <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="w-full border px-3 py-2 rounded"
-                    />
-                </div>
+        <div className="max-w-md mx-auto mt-10 border p-6 rounded shadow">
+            <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
 
-                <div>
-                    <label className="block mb-1 font-medium">Price</label>
-                    <input
-                        type="number"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        className="w-full border px-3 py-2 rounded"
-                    />
-                </div>
+            <div className="space-y-2">
+                <p><span className="font-semibold">SKU:</span> {product.sku || "N/A"}</p>
+                <p><span className="font-semibold">Stock:</span> {product.stock}</p>
+                <p><span className="font-semibold">Price:</span> ${product.price}</p>
+                <p><span className="font-semibold">Type:</span> {productType}</p>
+                <p><span className="font-semibold">Status:</span> {productStatus}</p>
+                <p><span className="font-semibold">Description:</span> {product.description || "N/A"}</p>
+            </div>
 
-                <div>
-                    <label className="block mb-1 font-medium">Image</label>
-                    <input
-                        type="file"
-                        onChange={(e) => setImageFile(e.target.files[0])}
-                        className="w-full border px-3 py-2 rounded"
-                    />
-                </div>
-
-                <button
-                    type="submit"
-                    className={`w-full bg-yellow-500 text-white px-4 py-2 rounded ${
-                        loading ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
-                    disabled={loading}
-                >
-                    {loading ? "Updating..." : "Update Product"}
-                </button>
-            </form>
+            <button
+                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
+                onClick={() => navigate("/products")}
+            >
+                Back to Products
+            </button>
         </div>
     );
 }
