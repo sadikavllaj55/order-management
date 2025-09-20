@@ -1,6 +1,7 @@
 // src/pages/Customers.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
+import api from "../api/api.js";
 
 
 export default function Customers() {
@@ -9,8 +10,8 @@ export default function Customers() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios
-            .get("http://127.0.0.1:8001/api/customers") // your API URL
+        api
+            .get("/customers") // your API URL
             .then((res) => {
                 setCustomers(res.data);
                 setLoading(false);
