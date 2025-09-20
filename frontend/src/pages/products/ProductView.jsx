@@ -49,7 +49,7 @@ export default function ProductEdit() {
             <h1 className="text-2xl font-bold mb-4">Edit Product</h1>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label className="block mb-1 font-medium">Name</label>
+                    <label className="block mb-1 font-medium text-red-500">Name</label>
                     <input
                         type="text"
                         value={name}
