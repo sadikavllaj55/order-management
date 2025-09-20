@@ -4,7 +4,7 @@ axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;
 
 const api = axios.create({
-    baseURL: "http://localhost:8001/api",
+    baseURL: import.meta.env.VITE_API_URL,
     headers: {
         "Content-Type": "application/json",
     },
@@ -20,3 +20,6 @@ api.interceptors.request.use((config) => {
 
 export default api;
 
+export function getUser() {
+    return JSON.parse(localStorage.getItem('user'));
+}

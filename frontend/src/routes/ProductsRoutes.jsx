@@ -5,14 +5,14 @@ import ProductList from "../pages/products/ProductList";
 import ProductCreate from "../pages/products/ProductCreate";
 import ProductEdit from "../pages/products/ProductEdit";
 import ProductView from "../pages/products/ProductView";
-import ProductsLayout from "../layouts/ProductsLayout.jsx";
+import AppLayout from "../layouts/AppLayout.jsx";
 
 export const productsRoutes = (
     <Route
         path="/products"
         element={
             <ProtectedRoute>
-                <ProductsLayout />
+                <AppLayout />
             </ProtectedRoute>
         }
     >
