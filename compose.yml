@@ -1,5 +1,5 @@
 services:
-  # Apps
+  # Backend
   backend:
     build:
       dockerfile: ./docker/Dockerfile.backend
@@ -16,6 +16,8 @@ services:
       ENVIRONMENT: ${APP_ENV}
       PHP_IDE_CONFIG: serverName=order-management
       VIRTUAL_HOST: order-management.web
+
+  # Frontend
   frontend:
     build:
       dockerfile: ./docker/Dockerfile.frontend

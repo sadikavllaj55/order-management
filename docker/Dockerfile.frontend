@@ -1,4 +1,4 @@
-# Use the official Node.js image with Yarn as the base image
+# Use the official Node.js image
 FROM node:lts
 
 # Set the working directory in the container
@@ -7,6 +7,7 @@ WORKDIR /app
 # Install dependencies
 COPY ./frontend .
 COPY docker/.bashrc /root/.bashrc
+
 RUN npm i
 RUN npm install -g serve
 

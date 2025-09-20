@@ -19,3 +19,7 @@ api.interceptors.request.use((config) => {
 });
 
 export default api;
+
+export function getUser() {
+    return JSON.parse(localStorage.getItem('user'));
+}

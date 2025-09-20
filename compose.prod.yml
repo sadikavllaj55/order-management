@@ -1,0 +1,50 @@
+services:
+  # Backend
+  backend:
+    build:
+      dockerfile: ./docker/Dockerfile.backend
+      args:
+        ENVIRONMENT: ${APP_ENV}
+    container_name: om-backend
+    restart: always
+    working_dir: /srv
+    ports:
+      - '8080:80'
+    environment:
+      ENVIRONMENT: ${APP_ENV}
+      PHP_IDE_CONFIG: serverName=order-management
+      VIRTUAL_HOST: order-management.web
+
+  # Frontend
+  frontend:
+    build:
+      dockerfile: ./docker/Dockerfile.frontend
+    container_name: om-frontend
+    restart: always
+    working_dir: /app
+    ports:
+      - '5173:5173'
+      - '3000:3000'
+    volumes:
+      - ./frontend/:/app
+    environment:
+      ENVIRONMENT: ${APP_ENV}
+      VITE_API_URL: ${APP_URL}
+
+  # Services
+  db:
+    image: mariadb:latest
+    container_name: om-db
+    hostname: om-db
+    restart: always
+    working_dir: /root
+    environment:
+      MARIADB_USER: ${DB_USERNAME}
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MARIADB_DATABASE: ${DB_DATABASE}
+    ports:
+      - "13307:3306"
+
+volumes:
+  db-data:
+    name: db-data

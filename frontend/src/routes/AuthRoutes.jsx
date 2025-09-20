@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router-dom";
+import {Route} from "react-router-dom";
 import Login from "../pages/auth/Login.jsx";
 
 export const authRoutes = (
