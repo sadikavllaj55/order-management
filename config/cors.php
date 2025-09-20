@@ -7,8 +7,8 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'http://localhost:5173', // update to your current frontend URL
-        // 'http://localhost:5174', // optional if you sometimes run on 5174
+        env('FRONTEND_URL'),
+        'http://localhost:5173',
     ],
 
     'allowed_headers' => ['*'],

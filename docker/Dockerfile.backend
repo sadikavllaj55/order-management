@@ -6,10 +6,6 @@ ARG ENVIRONMENT
 RUN apt-get update && apt-get install -y zip
 RUN docker-php-ext-install pdo pdo_mysql opcache
 
-# Install node
-COPY --from=node:24-bookworm-slim /usr/local/bin /usr/local/bin
-COPY --from=node:24-bookworm-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
-
 # Install composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -22,13 +18,10 @@ RUN cp ${PHP_INI_DIR}/php.ini-production ${PHP_INI_DIR}/php.ini || true
 
 # Install dependencies
 RUN composer install
-RUN npm install
 
 # Laravel setup
 RUN chown -R www-data:www-data storage/logs/
 RUN chown -R www-data:www-data storage/framework/
-
-RUN npm run build
 
 # Webserver setup
 RUN rm /etc/apache2/sites-enabled/000-default.conf || true

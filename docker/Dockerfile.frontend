@@ -1,0 +1,17 @@
+# Use the official Node.js image with Yarn as the base image
+FROM node:lts
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Install dependencies
+COPY ./frontend .
+COPY docker/.bashrc /root/.bashrc
+RUN npm i
+RUN npm install -g serve
+
+# Build your React application
+RUN npm run build
+
+# Serve the React application using serve
+CMD ["serve", "-s", "dist"]

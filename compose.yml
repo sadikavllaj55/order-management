@@ -1,16 +1,14 @@
 services:
   # Apps
-  app:
+  backend:
     build:
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker/Dockerfile.backend
       args:
         ENVIRONMENT: ${APP_ENV}
-    container_name: order-management
-    hostname: order-management
+    container_name: om-backend
     restart: always
     working_dir: /srv
     ports:
-      - '5173:5173'
       - '8080:80'
     volumes:
       - ./:/srv
@@ -18,12 +16,26 @@ services:
       ENVIRONMENT: ${APP_ENV}
       PHP_IDE_CONFIG: serverName=order-management
       VIRTUAL_HOST: order-management.web
+  frontend:
+    build:
+      dockerfile: ./docker/Dockerfile.frontend
+    container_name: om-frontend
+    restart: always
+    working_dir: /app
+    ports:
+      - '5173:5173'
+      - '3000:3000'
+    volumes:
+      - ./frontend/:/app
+    environment:
+      ENVIRONMENT: ${APP_ENV}
+      VITE_API_URL: ${APP_URL}
 
   # Services
   db:
     image: mariadb:latest
-    container_name: order-management-db
-    hostname: order-management-db
+    container_name: om-db
+    hostname: om-db
     restart: always
     working_dir: /root
     environment:
