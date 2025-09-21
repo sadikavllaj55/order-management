@@ -61,7 +61,7 @@ export default function ProductCreate() {
     if (loading) return <p className="text-center mt-10">Loading...</p>;
 
     return (
-        <div className="max-w-md mx-auto mt-10">
+        <div className="max-w-md mt-10">
             <h1 className="text-2xl font-bold mb-4">Add Product</h1>
 
             {errorMessage && (
