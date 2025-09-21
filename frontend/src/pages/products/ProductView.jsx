@@ -39,7 +39,7 @@ export default function ProductView() {
     const productStatus = statuses[product.status] || "N/A";
 
     return (
-        <div className="max-w-md mx-auto mt-10 border p-6 rounded shadow">
+        <div className="max-w-md mt-10 border p-6 rounded shadow">
             <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
 
             <div className="space-y-2">
